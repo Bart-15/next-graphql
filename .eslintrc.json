@@ -1,0 +1,40 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "globals": {
+    "React": "writable" // Allow 'React' as a global variable
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@next/next/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["prettier", "simple-import-sort"],
+  "rules": {
+    "no-console": ["warn"],
+    "no-unused-vars": ["warn"],
+    "import/named": "error", //Enforce import no resolved
+    // "max-lines-per-function": ["warn", 40],
+    "import/extensions": ["error", "never"],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "sort-imports": "off",
+    "import/order": "off",
+    "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": 0, // Disable the rule
+    "import/no-unresolved": 0,
+    "consistent-return": "off",
+    "prettier/prettier": [
+      "warn",
+      {
+        "printWidth": 80,
+        "singleQuote": true,
+        "endOfLine": "auto",
+        "jsxSingleQuote": false
+      }
+    ]
+  }
+}
