@@ -9,3 +9,12 @@ export const LOAD_GAMES = gql`
     }
   }
 `;
+
+export const GET_GAME = gql`
+  query GetGame($id: ID!) {
+    game(id: $id) {
+      title
+      platform
+    }
+  }
+`;

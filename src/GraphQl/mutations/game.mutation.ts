@@ -17,3 +17,11 @@ export const DELETE_GAME = gql`
     }
   }
 `;
+
+export const UPDATE_GAME = gql`
+  mutation UpdateGameMutation($id: ID!, $edits: EditsGameInput) {
+    updateGame(id: $id, edits: $edits) {
+      title
+    }
+  }
+`;

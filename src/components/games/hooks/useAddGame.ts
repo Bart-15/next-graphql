@@ -5,14 +5,6 @@ import { ADD_GAME } from '@/GraphQl/mutations/game.mutation';
 import { LOAD_GAMES } from '@/GraphQl/queries/game.query';
 
 export function useAddGame() {
-  const platformList = [
-    { value: 'psp', label: 'PSP' },
-    { value: 'x-box', label: 'X-Box' },
-    { value: 'laptop', label: 'Laptop' },
-    { value: 'mac-book', label: 'Mac Book' },
-    { value: 'table', label: 'Tablet' },
-  ];
-
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([
     'laptop',
   ]);
@@ -33,6 +25,5 @@ export function useAddGame() {
     addGame,
     loading,
     error,
-    platformList,
   };
 }

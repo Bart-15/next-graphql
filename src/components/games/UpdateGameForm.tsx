@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useAddGame } from '@/components/games/hooks/useAddGame';
+import { useUpdateGame } from '@/components/games/hooks/useUpdateGame';
+import { useViewGame } from '@/components/games/hooks/useViewGame';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,7 +11,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,29 +21,33 @@ import {
   GameFormValues,
 } from '@/validation/game.validation';
 
-const AddGameForm = () => {
-  const {
-    selectedPlatforms,
-    setSelectedPlatforms,
-    openDialog,
-    setOpenDialog,
-    addGame,
-  } = useAddGame();
+type UpdateGameFormProps = {
+  id: string;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+const UpdateGameForm = ({ id, open, setOpen }: UpdateGameFormProps) => {
+  const { data, selectedPlatforms, setSelectedPlatforms, loading } =
+    useViewGame(id);
+  const { updateGame } = useUpdateGame();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setValue,
     reset,
+    formState: { errors },
   } = useForm<GameFormValues>({
     mode: 'onChange',
     resolver: zodResolver(AddGameValidation),
-    defaultValues: {
-      title: '',
-    },
   });
 
-  useEffect(() => reset(), [openDialog, reset]);
+  useEffect(() => {
+    if (data) {
+      setValue('title', data?.game.title);
+    }
+  }, [data]);
 
   async function handleCreateGame(formValues: GameFormValues) {
     if (!selectedPlatforms.length) {
@@ -57,27 +61,28 @@ const AddGameForm = () => {
     };
 
     try {
-      await addGame({
+      await updateGame({
         variables: {
-          game: payload,
+          id: id,
+          edits: payload,
         },
       });
 
-      setOpenDialog(false);
+      setOpen(false);
     } catch (err) {
       console.error('Error adding game:', err);
     }
   }
+
+  if (loading) return <p>Loading...</p>;
+
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Add Game</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Game</DialogTitle>
+          <DialogTitle>Update Game</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(handleCreateGame)} id="add-game-form">
+        <form onSubmit={handleSubmit(handleCreateGame)} id="update-game-form">
           <div className="mb-2 space-x-2">
             <div className="grid flex-1 gap-2">
               <Label htmlFor="amount" className="sr-only">
@@ -108,9 +113,9 @@ const AddGameForm = () => {
           <Button
             type="submit"
             className="btn btn-primary"
-            form="add-game-form"
+            form="update-game-form"
           >
-            Submit
+            Update
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -118,4 +123,4 @@ const AddGameForm = () => {
   );
 };
 
-export default AddGameForm;
+export default UpdateGameForm;

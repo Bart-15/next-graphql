@@ -14,7 +14,7 @@ const Games = () => {
   }
 
   return (
-    <div>
+    <div className="mt-10">
       <AddGameForm />
       <GameTable games={data?.games!} />
     </div>
