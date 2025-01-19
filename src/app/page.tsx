@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import Games from '@/components/Games';
+import Games from '@/components/games/Games';
 
 export default function Home() {
   return (
